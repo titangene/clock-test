@@ -8,57 +8,45 @@
 <style>
 body {
   font-family: Microsoft JhengHei;
-  font-weight: 100;
   font-size: 30px;
   text-align: center;
 }
 </style>
 <body>
-<div class="container">
-  <h2 id="date-12"></h2>
-  <h2 id="date-24"></h2>
-</div>
+<h2 id="date-12"></h2>
+<h2 id="date-24"></h2>
 
 <script>
 var Ws = [ "週日", "週一", "週二", "週三", "週四", "週五", "週六", "週日" ];
-(function() {
-    function c(s) {
-        return s < 10 ? "0" + s : s;
-    }
-    function updateTime_12() {
-        var time = new Date();
-        var Y = time.getFullYear(),
-            M = time.getMonth() + 1,
-            D = time.getDate(),
-            W = time.getDay(),
-            h = time.getHours(),
-            m = time.getMinutes(),
-            s = time.getSeconds();
-        var ampm = (h >= 12) ? "pm" : "am",
-            h = (h == 12) ? h : ((h > 12) ? h - 12 : h);
-        var str = Y + "/" + c(M) + "/" + c(D) + " " + Ws[W] + " " + c(h) + ":" + c(m) + ":" + c(s) + " " + ampm;
-        document.getElementById("date-12").innerHTML = str;
-    }
-    setInterval(function() {
-        return updateTime_12();
-    }, 100);
-    
-    function updateTime_24() {
-        var time = new Date();
-        var Y = time.getFullYear(),
-            M = time.getMonth() + 1,
-            D = time.getDate(),
-            W = time.getDay(),
-            h = time.getHours(),
-            m = time.getMinutes(),
-            s = time.getSeconds();
-        var str = Y + "/" + c(M) + "/" + c(D) + " " + Ws[W] + " " + c(h) + ":" + c(m) + ":" + c(s);
-        document.getElementById("date-24").innerHTML = str;
-    }
-    setInterval(function() {
-        return updateTime_24();
-    }, 100);
-})();
+function c(s) { return s < 10 ? "0" + s : s; }
+function time(func) {
+	var time = new Date();
+	var Y = time.getFullYear(),
+        M = time.getMonth() + 1,
+        D = time.getDate(),
+        W = time.getDay(),
+        h = time.getHours(),
+        m = time.getMinutes(),
+        s = time.getSeconds();
+	func(Y, M, D, W, h, m, s);
+}
+function updateTime_12() {
+	time((Y, M, D, W, h, m, s) => {
+		var ampm = (h >= 12) ? "pm" : "am";
+		var h = (h == 12) ? h : ((h > 12) ? h - 12 : h);
+		var str = `${Y}/${c(M)}/${c(D)} ${Ws[W]} ${c(h)}:${c(m)}:${c(s)} ${ampm}`;
+		document.getElementById("date-12").innerHTML = str;
+	});
+}
+setInterval(() => { return updateTime_12() }, 100);
+
+function updateTime_24() {
+	time((Y, M, D, W, h, m, s) => {
+		var str = `${Y}/${c(M)}/${c(D)} ${Ws[W]} ${c(h)}:${c(m)}:${c(s)}`;
+		document.getElementById("date-24").innerHTML = str;
+	});
+}
+setInterval(() => { return updateTime_24() }, 100);
 </script>
 </body>
 </html>
